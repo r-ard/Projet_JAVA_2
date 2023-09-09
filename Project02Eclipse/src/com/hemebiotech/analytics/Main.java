@@ -8,8 +8,8 @@ import com.hemebiotech.analytics.writter.WriteSymptomFileFromData;
 public class Main {
 	public static void main(String args[]) throws Exception {
 		AnalyticsCounter analyticsCounter = new AnalyticsCounter(
-				new ReadSymptomDataFromFile("symptoms.txt"),
-				new WriteSymptomFileFromData("result.out", new SimpleSymptomRender()),
+				new ReadSymptomDataFromFile(args.length > 0 ? args[0] : "symptoms.txt"),
+				new WriteSymptomFileFromData(args.length > 1 ? args[1] : "result.txt", new SimpleSymptomRender()),
 				new AlphabeticalSymptomSorter()
 		);
 
