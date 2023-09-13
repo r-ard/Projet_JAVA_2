@@ -10,7 +10,7 @@ import com.hemebiotech.analytics.writter.WriteSymptomFileFromData;
 public class Main {
 	public static void main(String args[]) {
 		String inputFile = args.length > 0 ? args[0] : "symptoms.txt";
-		String outputFile = args.length > 1 ? args[1] : "result.txt";
+		String outputFile = args.length > 1 ? args[1] : "result.out";
 
 		// Create the instance of the main "Counter" Service
 		AnalyticsCounter analyticsCounter = new AnalyticsCounter(
