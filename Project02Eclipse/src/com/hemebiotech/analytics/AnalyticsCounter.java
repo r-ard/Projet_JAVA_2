@@ -1,5 +1,6 @@
 package com.hemebiotech.analytics;
 
+import com.hemebiotech.analytics.processor.ISymptomProcessor;
 import com.hemebiotech.analytics.reader.ISymptomReader;
 import com.hemebiotech.analytics.sorter.ISymptomSorter;
 import com.hemebiotech.analytics.writter.ISymptomWritter;
@@ -12,44 +13,47 @@ public class AnalyticsCounter {
     private ISymptomReader reader;
     private ISymptomWritter writter;
     private ISymptomSorter sorter;
+    private ISymptomProcessor processor;
 
-    private List<String> rawResults;
+    private List<String> rawSymptoms;
     private Map<String, Integer> results;
 
     public AnalyticsCounter(
             ISymptomReader reader,
             ISymptomWritter writter,
-            ISymptomSorter sorter
+            ISymptomSorter sorter,
+            ISymptomProcessor processor
     ) {
-        this.rawResults = null;
+        this.rawSymptoms = null;
         this.results = null;
         this.reader = reader;
         this.writter = writter;
         this.sorter = sorter;
+        this.processor = processor;
     }
 
-    public void readResults() {
+    /*
+    * Read the raw symptoms from a file by using the injected ISymptomReader
+    */
+    public boolean readSymptoms() {
         if(this.reader != null) {
-            this.rawResults = this.reader.GetSymptoms();
+            this.rawSymptoms = this.reader.GetSymptoms();
+        }
+        return this.rawSymptoms != null;
+    }
+
+    /*
+    * Process raw symptoms by using the injected ISymptomProcessor
+    */
+    public void processSymptoms() {
+        if(this.rawSymptoms != null && this.processor != null) {
+            this.results = this.processor.processSymptoms(this.rawSymptoms);
         }
     }
 
-    public void processResults() {
-        if(this.rawResults != null) {
-            Map<String, Integer> results = new HashMap<>();
-
-            for(String symptom : this.rawResults) {
-                if(!results.containsKey(symptom)) {
-                    results.put(symptom, 0);
-                }
-
-                results.put(symptom, results.get(symptom) + 1);
-            }
-
-            this.results = results;
-        }
-    }
-
+    /*
+    * Sort results by using the injected ISymptomSorter
+    */
     public void sortResults() {
         if(this.results != null && this.sorter != null) {
             this.sorter.setSymptoms(this.results);
@@ -57,6 +61,9 @@ public class AnalyticsCounter {
         }
     }
 
+    /*
+    * Write results to the drive as a text file
+    */
     public void writeResults() {
         if(this.writter != null && this.results != null) {
             this.writter.setSymptoms(this.results);
