@@ -1,4 +1,4 @@
-package com.hemebiotech.analytics;
+package com.hemebiotech.analytics.service;
 
 import com.hemebiotech.analytics.processor.ISymptomProcessor;
 import com.hemebiotech.analytics.reader.ISymptomReader;
