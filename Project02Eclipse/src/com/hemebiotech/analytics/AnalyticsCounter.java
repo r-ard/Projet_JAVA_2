@@ -1,43 +1,73 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
+import com.hemebiotech.analytics.processor.ISymptomProcessor;
+import com.hemebiotech.analytics.reader.ISymptomReader;
+import com.hemebiotech.analytics.sorter.ISymptomSorter;
+import com.hemebiotech.analytics.writter.ISymptomWritter;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AnalyticsCounter {
-	private static int headacheCount = 0;	// initialize to 0
-	private static int rashCount = 0;		// initialize to 0
-	private static int pupilCount = 0;		// initialize to 0
-	
-	public static void main(String args[]) throws Exception {
-		// first get input
-		BufferedReader reader = new BufferedReader (new FileReader("symptoms.txt"));
-		String line = reader.readLine();
+    private ISymptomReader reader;
+    private ISymptomWritter writter;
+    private ISymptomSorter sorter;
+    private ISymptomProcessor processor;
 
-		int i = 0;	// set i to 0
-		int headCount = 0;	// counts headaches
-		while (line != null) {
-			i++;	// increment i
-			System.out.println("symptom from file: " + line);
-			if (line.equals("headache")) {
-				headCount++;
-				System.out.println("number of headaches: " + headCount);
-			}
-			else if (line.equals("rush")) {
-				rashCount++;
-			}
-			else if (line.contains("pupils")) {
-				pupilCount++;
-			}
+    private List<String> rawSymptoms;
+    private Map<String, Integer> results;
 
-			line = reader.readLine();	// get another symptom
-		}
-		
-		// next generate output
-		FileWriter writer = new FileWriter ("result.out");
-		writer.write("headache: " + headacheCount + "\n");
-		writer.write("rash: " + rashCount + "\n");
-		writer.write("dialated pupils: " + pupilCount + "\n");
-		writer.close();
-	}
+    public AnalyticsCounter(
+            ISymptomReader reader,
+            ISymptomWritter writter,
+            ISymptomSorter sorter,
+            ISymptomProcessor processor
+    ) {
+        this.rawSymptoms = null;
+        this.results = null;
+        this.reader = reader;
+        this.writter = writter;
+        this.sorter = sorter;
+        this.processor = processor;
+    }
+
+    /*
+    * Read the raw symptoms from a file by using the injected ISymptomReader
+    */
+    public boolean readSymptoms() {
+        if(this.reader != null) {
+            this.rawSymptoms = this.reader.GetSymptoms();
+        }
+        return this.rawSymptoms != null;
+    }
+
+    /*
+    * Process raw symptoms by using the injected ISymptomProcessor
+    */
+    public void processSymptoms() {
+        if(this.rawSymptoms != null && this.processor != null) {
+            this.results = this.processor.processSymptoms(this.rawSymptoms);
+        }
+    }
+
+    /*
+    * Sort results by using the injected ISymptomSorter
+    */
+    public void sortResults() {
+        if(this.results != null && this.sorter != null) {
+            this.sorter.setSymptoms(this.results);
+            this.results = this.sorter.getSortedSymptoms();
+        }
+    }
+
+    /*
+    * Write results to the drive as a text file
+    */
+    public void writeResults() {
+        if(this.writter != null && this.results != null) {
+            this.writter.setSymptoms(this.results);
+            this.writter.writeSymptoms();
+        }
+    }
 }
