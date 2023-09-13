@@ -2,7 +2,7 @@ package com.hemebiotech.analytics;
 
 import com.hemebiotech.analytics.processor.BasicSymptomProcessor;
 import com.hemebiotech.analytics.reader.ReadSymptomDataFromFile;
-import com.hemebiotech.analytics.renderer.SimpleSymptomRender;
+import com.hemebiotech.analytics.renderer.SimpleSymptomRenderer;
 import com.hemebiotech.analytics.sorter.AlphabeticalSymptomSorter;
 import com.hemebiotech.analytics.writter.WriteSymptomFileFromData;
 
@@ -18,7 +18,7 @@ public class Main {
 				),
 				new WriteSymptomFileFromData(
 						outputFile,
-						new SimpleSymptomRender()
+						new SimpleSymptomRenderer()
 				),
 				new AlphabeticalSymptomSorter(),
 				new BasicSymptomProcessor()
