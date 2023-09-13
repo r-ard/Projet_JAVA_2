@@ -8,13 +8,16 @@ import com.hemebiotech.analytics.writter.WriteSymptomFileFromData;
 
 public class Main {
 	public static void main(String args[]) {
+		String inputFile = args.length > 0 ? args[0] : "symptoms.txt";
+		String outputFile = args.length > 1 ? args[1] : "result.txt";
+
 		// Create the instance of the main "Counter" Service
 		AnalyticsCounter analyticsCounter = new AnalyticsCounter(
 				new ReadSymptomDataFromFile(
-						args.length > 0 ? args[0] : "symptoms.txt"
+						inputFile
 				),
 				new WriteSymptomFileFromData(
-						args.length > 1 ? args[1] : "result.txt",
+						outputFile,
 						new SimpleSymptomRender()
 				),
 				new AlphabeticalSymptomSorter(),
@@ -24,6 +27,7 @@ public class Main {
 		// Read lines of the content of "symptoms.txt"
 		if(!analyticsCounter.readSymptoms()) {
 			// If the file, doesn't exist, isn't accessible or is empty, then exit the program with the error code "1"
+			System.out.println("Failed to read the symptoms file at \"" + inputFile + "\".");
 			System.exit(1);
 			return;
 		}
@@ -35,6 +39,13 @@ public class Main {
 		analyticsCounter.sortResults();
 
 		// Write the processed & sorted results in a text file by using a IWriter class
-		analyticsCounter.writeResults();
+		if(!analyticsCounter.writeResults()) {
+			// If the out file creation fails, exit the program with the error code "2"
+			System.out.println("Failed to write the result file at \"" + outputFile + "\".");
+			System.exit(2);
+			return;
+		}
+
+		System.out.println("The result file has been successfully written at \"" + outputFile + "\" !");
 	}
 }

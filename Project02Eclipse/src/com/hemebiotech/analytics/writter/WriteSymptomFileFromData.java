@@ -22,7 +22,7 @@ public class WriteSymptomFileFromData implements ISymptomWritter {
     }
 
     @Override
-    public void writeSymptoms() {
+    public boolean writeSymptoms() {
         if(this.fileName != null && this.symptoms != null) {
             FileWriter writer = null;
             try {
@@ -34,6 +34,7 @@ public class WriteSymptomFileFromData implements ISymptomWritter {
             }
             catch(Exception error) {
                 error.printStackTrace();
+                return false;
             }
             finally {
                 if(writer != null) {
@@ -45,6 +46,8 @@ public class WriteSymptomFileFromData implements ISymptomWritter {
                     }
                 }
             }
+            return true;
         }
+        return false;
     }
 }
