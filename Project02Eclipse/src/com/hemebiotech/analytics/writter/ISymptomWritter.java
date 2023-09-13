@@ -8,5 +8,5 @@ public interface ISymptomWritter {
     /**
      * Write symptoms to a drive as a text file
      */
-    void writeSymptoms();
+    boolean writeSymptoms();
 }

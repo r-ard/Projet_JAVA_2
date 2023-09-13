@@ -64,10 +64,11 @@ public class AnalyticsCounter {
     /*
     * Write results to the drive as a text file
     */
-    public void writeResults() {
+    public boolean writeResults() {
         if(this.writter != null && this.results != null) {
             this.writter.setSymptoms(this.results);
-            this.writter.writeSymptoms();
+            return this.writter.writeSymptoms();
         }
+        return false;
     }
 }
