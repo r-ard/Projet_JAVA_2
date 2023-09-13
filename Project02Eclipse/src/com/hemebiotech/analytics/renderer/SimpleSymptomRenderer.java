@@ -2,10 +2,10 @@ package com.hemebiotech.analytics.renderer;
 
 import java.util.Map;
 
-public class SimpleSymptomRender implements ISymptomRenderer {
+public class SimpleSymptomRenderer implements ISymptomRenderer {
     private Map<String, Integer> symptoms;
 
-    public SimpleSymptomRender() {
+    public SimpleSymptomRenderer() {
         this.symptoms = null;
     }
 
