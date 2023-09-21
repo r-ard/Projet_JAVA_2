@@ -35,11 +35,11 @@ public class AnalyticsCounter {
     /*
     * Read the raw symptoms from a file by using the injected ISymptomReader
     */
-    public boolean readSymptoms() {
+    public void readSymptoms() throws Exception {
         if(this.reader != null) {
             this.rawSymptoms = this.reader.GetSymptoms();
         }
-        return this.rawSymptoms != null;
+        if(this.rawSymptoms.isEmpty()) throw new Exception("Symptoms file content is null");
     }
 
     /*
@@ -56,19 +56,16 @@ public class AnalyticsCounter {
     */
     public void sortResults() {
         if(this.results != null && this.sorter != null) {
-            this.sorter.setSymptoms(this.results);
-            this.results = this.sorter.getSortedSymptoms();
+            this.results = this.sorter.sortSymptoms(this.results);
         }
     }
 
     /*
-    * Write results to the drive as a text file
+    * Write results to the drive by using the injected ISymptomWriter
     */
-    public boolean writeResults() {
+    public void writeResults() throws Exception {
         if(this.writter != null && this.results != null) {
-            this.writter.setSymptoms(this.results);
-            return this.writter.writeSymptoms();
+            this.writter.writeSymptoms(this.results);
         }
-        return false;
     }
 }

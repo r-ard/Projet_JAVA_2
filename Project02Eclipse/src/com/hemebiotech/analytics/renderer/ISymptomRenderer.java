@@ -3,11 +3,9 @@ package com.hemebiotech.analytics.renderer;
 import java.util.Map;
 
 public interface ISymptomRenderer {
-    void setSymptoms(Map<String, Integer> symptoms);
-
     /**
-     * Generate the file content of a symptoms map
+     * Generate the file content/string form of a symptoms map
      * @return generated file content
      */
-    String renderSymptoms();
+    String renderSymptoms(Map<String, Integer> symptoms);
 }
