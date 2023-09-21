@@ -3,10 +3,8 @@ package com.hemebiotech.analytics.writter;
 import java.util.Map;
 
 public interface ISymptomWritter {
-    void setSymptoms(Map<String, Integer> symptoms);
-
     /**
-     * Write symptoms to a drive as a text file
+     * Write symptoms to the drive as a text file
      */
-    boolean writeSymptoms();
+    void writeSymptoms(Map<String, Integer> symptoms) throws Exception;
 }

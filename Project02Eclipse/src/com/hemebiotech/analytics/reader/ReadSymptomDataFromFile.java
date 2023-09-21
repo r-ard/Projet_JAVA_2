@@ -25,34 +25,22 @@ public class ReadSymptomDataFromFile implements ISymptomReader {
 	}
 	
 	@Override
-	public List<String> GetSymptoms() {
+	public List<String> GetSymptoms() throws Exception {
 		ArrayList<String> result = new ArrayList<String>();
 		
 		if (filepath != null) {
-			BufferedReader reader = null;
-			try {
-				reader = new BufferedReader (new FileReader(filepath));
+			try(BufferedReader reader = new BufferedReader (new FileReader(filepath))) {
 				String line = reader.readLine();
 				while (line != null) {
 					result.add(line);
 					line = reader.readLine();
 				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			finally {
-				if(reader != null) {
-					try {
-						reader.close();
-					}
-					catch(IOException err) {
-						err.printStackTrace();
-					}
-				}
+			} catch (Exception e) {
+				throw new Exception("Failed to access to the file \"" + filepath + "\"");
 			}
 		}
 		
-		return result.size() > 0 ? result : null;
+		return result;
 	}
 
 }

@@ -3,11 +3,9 @@ package com.hemebiotech.analytics.sorter;
 import java.util.Map;
 
 public interface ISymptomSorter {
-    void setSymptoms(Map<String, Integer> symptoms);
-
     /**
-     * Get sorted symptoms map
+     * Sort the input symptoms map
      * @return sorted symptoms map
      */
-    Map<String, Integer> getSortedSymptoms();
+    Map<String, Integer> sortSymptoms(Map<String, Integer> symptoms);
 }

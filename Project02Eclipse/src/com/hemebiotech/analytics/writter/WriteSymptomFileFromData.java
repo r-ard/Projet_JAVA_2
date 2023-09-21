@@ -6,48 +6,28 @@ import java.io.FileWriter;
 import java.util.Map;
 
 public class WriteSymptomFileFromData implements ISymptomWritter {
-    private Map<String, Integer> symptoms;
     private String fileName;
     private ISymptomRenderer renderer;
 
     public WriteSymptomFileFromData(String fileName, ISymptomRenderer renderer) {
-        this.symptoms = null;
         this.fileName = fileName;
         this.renderer = renderer;
     }
 
     @Override
-    public void setSymptoms(Map<String, Integer> symptoms) {
-        this.symptoms = symptoms;
-    }
-
-    @Override
-    public boolean writeSymptoms() {
-        if(this.fileName != null && this.symptoms != null) {
-            FileWriter writer = null;
-            try {
-                writer = new FileWriter(this.fileName);
+    public void writeSymptoms(Map<String, Integer> symptoms) throws Exception {
+        if(this.fileName != null && symptoms != null) {
+            try(FileWriter writer = new FileWriter(this.fileName)) {
                 if(this.renderer != null) {
-                    this.renderer.setSymptoms(this.symptoms);
-                    writer.write( this.renderer.renderSymptoms() );
+                    writer.write( this.renderer.renderSymptoms(symptoms) );
                 }
             }
             catch(Exception error) {
-                error.printStackTrace();
-                return false;
+                throw new Exception("Failed to write the file at \"" + this.fileName + "\"");
             }
-            finally {
-                if(writer != null) {
-                    try {
-                        writer.close();
-                    }
-                    catch (Exception error) {
-                        error.printStackTrace();
-                    }
-                }
-            }
-            return true;
         }
-        return false;
+        else {
+            throw new Exception("Filename or symptoms map null while writting symptoms");
+        }
     }
 }
