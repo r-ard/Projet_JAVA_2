@@ -37,7 +37,7 @@ public class AnalyticsCounter {
     */
     public void readSymptoms() throws Exception {
         if(this.reader != null) {
-            this.rawSymptoms = this.reader.GetSymptoms();
+            this.rawSymptoms = this.reader.getSymptoms();
         }
         if(this.rawSymptoms.isEmpty()) throw new Exception("Symptoms file content is null");
     }
